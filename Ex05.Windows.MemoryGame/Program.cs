@@ -13,6 +13,8 @@ namespace Ex05.Windows.MemoryGame
             FormSettings formSettings = new FormSettings();
 
             formSettings.ShowDialog();
+            FormGame formGame = new FormGame();
+            formGame.ShowDialog();
         }
     }
 }
