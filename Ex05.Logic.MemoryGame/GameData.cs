@@ -5,23 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ex02_MemoryGameConsole.GameLogic
+namespace Ex05.Logic.MemoryGame
 {
-    internal class GameData
+    public class GameData
     {
         private List<Player> m_Players; //List because if in the future we want to change the number of players during the game.
         private GameBoard m_Board;
         private Turn m_CurrentTurn;
-        private Random m_Random;
+        private readonly Random r_Random;
         private List<string> m_AvailableSquares;
-
-        public GameBoard Board
-        {
-            get
-            {
-                return m_Board;
-            }
-        }
 
         public GameData(int i_NumOfPlayers, string[] i_PlayersNames, string[] i_PlayersTypes)
         {
@@ -31,14 +23,43 @@ namespace Ex02_MemoryGameConsole.GameLogic
                 m_Players.Add(new Player(i_PlayersNames[i], i_PlayersTypes[i]));
             }
 
-            m_Random = new Random();
+            r_Random = new Random();
             m_AvailableSquares = new List<string>();
         }
 
-        public void InitialBoardAndTurn()
+        public string FirstPlayerName
+        {
+            get 
+            { 
+                return m_Players[0].Name;
+            }
+        }
+        public string SecondPlayerName
+        {
+            get
+            {
+                return m_Players[1].Name;
+            }
+        }
+
+        public GameBoard Board
+        {
+            get
+            {
+                return m_Board;
+            }
+        }
+
+        public void InitialTurn()
+        {
+            m_CurrentTurn = new Turn(m_Players[0]);
+        }
+
+        public void InitialBoard(int i_Rows, int i_Cols)
         {
             m_Board = new GameBoard();
-            m_CurrentTurn = new Turn(m_Players[0]);
+            m_Board.InitialGameBoard(i_Rows, i_Cols);
+            initializeAvailableSquares();
         }
 
         private void initializeAvailableSquares()
@@ -59,7 +80,7 @@ namespace Ex02_MemoryGameConsole.GameLogic
 
         public string ComputerChoosingSquare()
         {
-            int randomIndex = m_Random.Next(m_AvailableSquares.Count);
+            int randomIndex = r_Random.Next(m_AvailableSquares.Count);
 
             return m_AvailableSquares[randomIndex];
         }
@@ -102,18 +123,6 @@ namespace Ex02_MemoryGameConsole.GameLogic
             }
 
             m_AvailableSquares.Remove(i_Square);
-        }
-
-        public bool TryInitialBoard(int i_Rows, int i_Cols, out string o_ErrorMessage)
-        {
-            bool isInitialized = m_Board.TryInitialGameBoard(i_Rows, i_Cols, out o_ErrorMessage);
-
-            if (isInitialized)
-            {
-                initializeAvailableSquares();
-            }
-
-            return isInitialized;
         }
 
         public bool IsValidSquareInput(string i_Square, out string o_Message)
@@ -176,8 +185,8 @@ namespace Ex02_MemoryGameConsole.GameLogic
 
         private void addCardsToAvailableSquares()
         {
-            m_AvailableSquares.Add(m_CurrentTurn.Card1.Location);
-            m_AvailableSquares.Add(m_CurrentTurn.Card2.Location);
+            //m_AvailableSquares.Add(m_CurrentTurn.Card1.Location); לטפל בזה!
+            //m_AvailableSquares.Add(m_CurrentTurn.Card2.Location);
         }
 
         private void switchToNextPlayer()

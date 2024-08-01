@@ -4,19 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ex02_MemoryGameConsole.GameLogic
+namespace Ex05.Logic.MemoryGame
 {
-    internal class Card
+    public class Card
     {
         private bool m_IsFlipped;
         private readonly uint r_Content;
-        private readonly string r_Location;
+        private readonly int r_Row;
+        private readonly int r_Col;
 
-        public Card(uint i_Data, string i_Location)
+        public Card(uint i_Data, int i_Row, int i_Col)
         {
             m_IsFlipped = false;
             r_Content = i_Data;
-            r_Location = i_Location;
+            r_Row = i_Row;
+            r_Col = i_Col;
         }
 
         public bool IsFlipped
@@ -36,14 +38,6 @@ namespace Ex02_MemoryGameConsole.GameLogic
             get 
             {
                 return r_Content;
-            }
-        }
-
-        public string Location
-        {
-            get
-            {
-                return r_Location;
             }
         }
     }

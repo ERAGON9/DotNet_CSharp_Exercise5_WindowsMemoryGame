@@ -10,9 +10,10 @@ namespace Ex05.Windows.MemoryGame
     {
         public static void Main()
         {
-            FormSettings formSettings = new FormSettings();
+            GameManager gameManager = new GameManager();
 
-            formSettings.ShowDialog();
+            gameManager.RunProgram();
+
             FormGame formGame = new FormGame();
             formGame.ShowDialog();
         }

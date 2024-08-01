@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ex02_MemoryGameConsole.GameLogic
+namespace Ex05.Logic.MemoryGame
 {
     internal class Turn
     {

@@ -133,6 +133,7 @@
             this.Controls.Add(this.m_TextBoxFirstPlayerName);
             this.Controls.Add(this.m_LabelFirstPlayerName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormSettings";
             this.ShowIcon = false;

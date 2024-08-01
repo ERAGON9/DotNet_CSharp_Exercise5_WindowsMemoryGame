@@ -5,13 +5,14 @@ using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ex02_MemoryGameConsole.GameLogic
+namespace Ex05.Logic.MemoryGame
 {
-    internal class GameBoard
+    public class GameBoard
     {
         private Card[,] m_CardsMatrix;
         private int m_Width;  //Not readonly, it can change if choose to play again.
         private int m_Height; //Not readonly, it can change if choose to play again.
+        Random r_Random = new Random();
 
         public int Width
         {
@@ -37,35 +38,12 @@ namespace Ex02_MemoryGameConsole.GameLogic
             }
         }
 
-        public bool TryInitialGameBoard(int i_Rows, int i_Cols, out string o_ErrorMesage)
+        public void InitialGameBoard(int i_Rows, int i_Cols)
         {
-            bool isValid = isEvenSquaresAmount(i_Rows, i_Cols, out o_ErrorMesage);
-
-            if (isValid)
-            {
-                m_Width = i_Cols;
-                m_Height = i_Rows;
-                m_CardsMatrix = new Card[i_Rows, i_Cols];
-                fillCardsMatrix();
-            }
-
-            return isValid;
-        }
-
-        private bool isEvenSquaresAmount(int i_Rows, int i_Cols, out string o_ErrorMesage)
-        {
-            bool countOfSquaresIsEven = i_Rows * i_Cols % 2 == 0;
-
-            if (!countOfSquaresIsEven)
-            {
-                o_ErrorMesage = "Board must have an even number of cells.";
-            }
-            else
-            {
-                o_ErrorMesage = null;
-            }
-
-            return countOfSquaresIsEven;
+            m_Width = i_Cols;
+            m_Height = i_Rows;
+            m_CardsMatrix = new Card[i_Rows, i_Cols];
+            fillCardsMatrix();
         }
 
         private void fillCardsMatrix()
@@ -83,10 +61,9 @@ namespace Ex02_MemoryGameConsole.GameLogic
                 currentValue++;
             }
 
-            Random randomNumber = new Random();
             for (int i = 0; i < numbersToShuffle.Length - 1; i++)
             {
-                int j = randomNumber.Next(i, numbersToShuffle.Length);
+                int j = r_Random.Next(i, numbersToShuffle.Length);
                 uint temp = numbersToShuffle[i];
                 numbersToShuffle[i] = numbersToShuffle[j];
                 numbersToShuffle[j] = temp;
@@ -97,18 +74,10 @@ namespace Ex02_MemoryGameConsole.GameLogic
             {
                 for (int j = 0; j < cols; j++)
                 {
-                    m_CardsMatrix[i, j] = new Card(numbersToShuffle[arrayIndex], getLocationFromIndex(i, j));
+                    m_CardsMatrix[i, j] = new Card(numbersToShuffle[arrayIndex], i, j);
                     arrayIndex++;
                 }
             }
-        }
-
-        private string getLocationFromIndex(int i_Row, int i_Col)
-        {
-            char colChar = (char)('A' + i_Col);
-            string location = $"{colChar}{i_Row + 1}";
-
-            return location;
         }
 
         public bool IsThereUnflippedCards()
@@ -129,7 +98,7 @@ namespace Ex02_MemoryGameConsole.GameLogic
 
         public Card GetCard(int i_Row, int i_Col)
         {
-            Card card = m_CardsMatrix[i_Row - 1, i_Col - 1];
+            Card card = m_CardsMatrix[i_Row, i_Col];
 
             return card;
         }
