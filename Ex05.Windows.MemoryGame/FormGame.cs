@@ -144,6 +144,7 @@ namespace Ex05.Windows.MemoryGame
                     {
                         m_GameOver = true;
                         endGameMessage();
+                        this.Close();
                     }
                 }
                 else
@@ -179,8 +180,6 @@ Want another round?";
             {
                 m_WantAnotherRound = true;
             }
-
-            this.Close();
         }
 
         private string finishPosition(out string o_Caption)
