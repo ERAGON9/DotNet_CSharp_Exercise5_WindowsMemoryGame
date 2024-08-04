@@ -40,5 +40,21 @@ namespace Ex05.Logic.MemoryGame
                 return r_Content;
             }
         }
+
+        public int Row
+        {
+            get
+            {
+                return r_Row;
+            }
+        }
+
+        public int Col
+        {
+            get
+            {
+                return r_Col;
+            }
+        }
     }
 }

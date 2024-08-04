@@ -1,6 +1,6 @@
 ﻿namespace Ex05.Windows.MemoryGame
 {
-    partial class ButtonCard
+    partial class ButtonCardUserControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -41,6 +41,7 @@
             this.m_ButtonCard.Size = new System.Drawing.Size(70, 80);
             this.m_ButtonCard.TabIndex = 0;
             this.m_ButtonCard.UseVisualStyleBackColor = false;
+            this.m_ButtonCard.Click += new System.EventHandler(this.m_ButtonCard_Click);
             // 
             // ButtonCard
             // 

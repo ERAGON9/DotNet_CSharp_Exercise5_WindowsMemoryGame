@@ -48,6 +48,11 @@ namespace Ex05.Logic.MemoryGame
             m_Points++;
         }
 
+        public void InitialPlayerScore()
+        {
+            m_Points = 0;
+        }
+
         private ePlayerType extractPlayerTypeFromString(string i_PlayerTypeString)
         {
             ePlayerType value;

@@ -13,9 +13,6 @@ namespace Ex05.Windows.MemoryGame
             GameManager gameManager = new GameManager();
 
             gameManager.RunProgram();
-
-            FormGame formGame = new FormGame();
-            formGame.ShowDialog();
         }
     }
 }

@@ -13,23 +13,18 @@ namespace Ex05.Windows.MemoryGame
         private GameData m_GameEngine;
         private FormSettings m_FormSettings;
         private FormGame m_FormGame;
-        private bool m_ProgramStillRunning;
         private const int k_NumOfPlayers = 2;
 
         public GameManager()
         {
             m_FormSettings = new FormSettings();
             m_FormGame = new FormGame();
-            m_ProgramStillRunning = true;
         }
 
         public void RunProgram()
         {
             setGameProperties();
-            while (m_ProgramStillRunning)
-            {
-                startNewGame();
-            }
+            startNewGame();
         }
 
         private void setGameProperties()
@@ -48,12 +43,29 @@ namespace Ex05.Windows.MemoryGame
 
         private void startNewGame()
         {
+            initialTurnAndBoard();
+            m_FormGame.SetWindowView(m_GameEngine);
+            m_FormGame.ShowDialog();
+
+            while (m_FormGame.WantAnotherGame)
+            {
+                initialTurnAndBoard();
+                initialPlayersScore();
+                m_FormGame.ReseWindowView();
+                m_FormGame.ShowDialog();
+            }
+        }
+
+        private void initialTurnAndBoard()
+        {
             m_GameEngine.InitialTurn();
             extractBoardRowsCols(m_FormSettings.BoardSize, out int boardRows, out int boardCols);
             m_GameEngine.InitialBoard(boardRows, boardCols);
-            m_FormGame.SetWindowView(m_GameEngine);
-            m_FormGame.ShowDialog();
-            //runGame();
+        }
+
+        private void initialPlayersScore()
+        {
+            m_GameEngine.InitialPlayersScore();
         }
 
         private void extractBoardRowsCols(string i_BoardSize, out int o_BoardRows, out int o_BoardCols)

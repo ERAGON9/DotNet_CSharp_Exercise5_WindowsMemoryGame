@@ -39,11 +39,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ButtonCard.cs">
+    <Compile Include="ButtonCardUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ButtonCard.Designer.cs">
-      <DependentUpon>ButtonCard.cs</DependentUpon>
+    <Compile Include="ButtonCardUserControl.Designer.cs">
+      <DependentUpon>ButtonCardUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ButtonCard.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="FormGame.cs">
       <SubType>Form</SubType>
@@ -68,8 +71,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ButtonCard.resx">
-      <DependentUpon>ButtonCard.cs</DependentUpon>
+    <EmbeddedResource Include="ButtonCardUserControl.resx">
+      <DependentUpon>ButtonCardUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormGame.resx">
       <DependentUpon>FormGame.cs</DependentUpon>

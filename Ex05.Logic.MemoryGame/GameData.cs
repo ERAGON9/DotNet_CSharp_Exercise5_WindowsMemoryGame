@@ -27,21 +27,6 @@ namespace Ex05.Logic.MemoryGame
             m_AvailableSquares = new List<string>();
         }
 
-        public string FirstPlayerName
-        {
-            get 
-            { 
-                return m_Players[0].Name;
-            }
-        }
-        public string SecondPlayerName
-        {
-            get
-            {
-                return m_Players[1].Name;
-            }
-        }
-
         public GameBoard Board
         {
             get
@@ -64,28 +49,43 @@ namespace Ex05.Logic.MemoryGame
 
         private void initializeAvailableSquares()
         {
-            char colChar;
             string square;
 
-            for (int i = 1; i <= m_Board.Height; i++)
+            for (int i = 0; i < m_Board.Height; i++)
             {
-                for (int j = 1; j <= m_Board.Width; j++)
+                for (int j = 0; j < m_Board.Width; j++)
                 {
-                    colChar = (char)('A' + j - 1);
-                    square = $"{colChar}{i}";
+                    square = $"({j},{i})";
                     m_AvailableSquares.Add(square);
                 }
             }
         }
 
-        public string ComputerChoosingSquare()
+        public void InitialPlayersScore()
+        {
+            foreach (Player player in m_Players)
+            {
+                player.InitialPlayerScore();
+            }
+        }
+
+        public Card ComputerChoosingCard()
+        {
+            string square = computerChoosingSquare();
+            int col = square[1] - '0';
+            int row = square[3] - '0';
+
+            return m_Board.GetCard(row, col);
+        }
+
+        private string computerChoosingSquare()
         {
             int randomIndex = r_Random.Next(m_AvailableSquares.Count);
 
             return m_AvailableSquares[randomIndex];
         }
 
-        public string GetCurrenPlayerType()
+        public string GetCurrentPlayerType()
         {
             return getPlayerTypeFromEnum(m_CurrentTurn.CurrentPlayer.Type);
         }
@@ -106,23 +106,27 @@ namespace Ex05.Logic.MemoryGame
             return value;
         }
 
-        public void FlipCardInCurrentTurn(string i_Square, int i_PartOfTurn)
+        public Card[] GetCurrentTurnCards()
         {
-            int row, col;
+            Card[] cards = new Card[2] { m_CurrentTurn.Card1, m_CurrentTurn.Card2 };
+            
+            return cards;
+        }
 
-            extractRowAndColFromSquareString(i_Square, out row, out col);
+        public void FlipCardInCurrentTurn(int i_Row, int i_Col, int i_PartOfTurn)
+        {
             if (i_PartOfTurn.Equals(1))
             {
-                m_CurrentTurn.Card1 = m_Board.GetCard(row, col);
+                m_CurrentTurn.Card1 = m_Board.GetCard(i_Row, i_Col);
                 m_CurrentTurn.FlipCard1();
             }
             else // i_PartOfTurn.Equals(2)
             {
-                m_CurrentTurn.Card2 = m_Board.GetCard(row, col);
+                m_CurrentTurn.Card2 = m_Board.GetCard(i_Row, i_Col);
                 m_CurrentTurn.FlipCard2();
             }
 
-            m_AvailableSquares.Remove(i_Square);
+            m_AvailableSquares.Remove($"({i_Col},{i_Row})");
         }
 
         public bool IsValidSquareInput(string i_Square, out string o_Message)
@@ -143,6 +147,11 @@ namespace Ex05.Logic.MemoryGame
             return playerName;
         }
 
+        private Player getPlayerOfCurrentTurn()
+        {
+            return m_CurrentTurn.CurrentPlayer;
+        }
+
         public bool IsThereUnflippedCardsOnBoard()
         {
             return m_Board.IsThereUnflippedCards();
@@ -150,7 +159,7 @@ namespace Ex05.Logic.MemoryGame
 
         public void OperatesByChosenCards()
         {
-            bool isAPair = isCardsTheSame();
+            bool isAPair = IsCardsTheSame();
 
             if (isAPair)
             {
@@ -163,10 +172,10 @@ namespace Ex05.Logic.MemoryGame
                 switchToNextPlayer();
             }
 
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(1000);
         }
 
-        private bool isCardsTheSame()
+        public bool IsCardsTheSame()
         {
             bool isAPair = m_CurrentTurn.Card1.Content == m_CurrentTurn.Card2.Content;
             
@@ -185,8 +194,8 @@ namespace Ex05.Logic.MemoryGame
 
         private void addCardsToAvailableSquares()
         {
-            //m_AvailableSquares.Add(m_CurrentTurn.Card1.Location); לטפל בזה!
-            //m_AvailableSquares.Add(m_CurrentTurn.Card2.Location);
+            m_AvailableSquares.Add($"({m_CurrentTurn.Card1.Col},{m_CurrentTurn.Card1.Row})");
+            m_AvailableSquares.Add($"({m_CurrentTurn.Card2.Col},{m_CurrentTurn.Card2.Row})");
         }
 
         private void switchToNextPlayer()
@@ -202,11 +211,6 @@ namespace Ex05.Logic.MemoryGame
                     break;
                 }
             }
-        }
-
-        private Player getPlayerOfCurrentTurn()
-        {
-            return m_CurrentTurn.CurrentPlayer;
         }
 
         public int[] GetPlayersScore()
@@ -233,8 +237,7 @@ namespace Ex05.Logic.MemoryGame
             return playersNames;
         }
 
-        private void extractRowAndColFromSquareString(string i_Square, out int o_Row,
-                                                      out int o_Col)
+        private void extractRowAndColFromSquareString(string i_Square, out int o_Row, out int o_Col)
         {
             char colChar = i_Square[0];
             char rowChar = i_Square[1];
